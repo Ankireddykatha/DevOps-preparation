@@ -1,0 +1,56 @@
+# Top 5 Ways to Reduce Kubernetes Cluster Cost
+
+**Based on the video by Abhishek Veeramalla**
+
+This guide summarizes every key point from the video, providing a comprehensive, actionable checklist for Kubernetes cost optimization.
+
+---
+
+## 1. Cost Visibility
+
+- **FinOps Principle:** You cannot manage what you cannot measure.
+- **Granularity:** Track costs at Pod, Deployment, Service, Namespace, and Node levels.
+- **Actionable Data:** Identify expensive Pods and analyze why they consume resources.
+- **Tools:**
+	- Open Source: KubeCost, OpenCost
+	- Proprietary: Cast AI
+	- Manual: Even an Excel sheet is better than nothing
+
+## 2. Right-Sizing Instances (Pod Level)
+
+- **Pod Sizing:** Focus on setting appropriate Requests and Limits for Pods.
+- **Common Mistake:** Running Pods without resource limits.
+- **Risk:** Memory leaks (e.g., in Java apps) can cause runaway costs.
+- **Collaboration:** Work with developers to analyze and tune resource usage.
+
+## 3. Autoscaling (Scale Up AND Down)
+
+- **Not Just for Spikes:** Autoscaling should also scale down during low traffic.
+- **Tools:** Karpenter, EKS Auto Mode, GKE Autopilot
+- **Dynamic Adjustment:** Reduce nodes during off-peak hours.
+- **Bin Packing:** Use platforms like Cast AI to rebalance and terminate underutilized nodes.
+
+## 4. Spot Instances
+
+- **Savings:** Can reduce costs by 60–70%.
+- **Strategy:**
+	- Do not use for critical workloads (e.g., Payments)
+	- Use for stateless, non-critical services (e.g., email/OTP workers)
+	- Mixed clusters: combine regular and Spot nodes
+
+## 5. Cross-Zone Networking Costs
+
+- **Hidden Cost:** Data transfer between Availability Zones (AZ) incurs charges.
+- **Example:** Kafka broker in one AZ writing to EBS in another AZ.
+- **Scale Impact:** For high-volume apps, networking fees can rival compute costs.
+- **Solution:**
+	- Use storage like S3 with built-in replication
+	- Architect to minimize cross-zone data movement
+
+---
+
+**Video Link:** [Top 5 ways to reduce Kubernetes cluster cost](https://www.youtube.com/watch?v=9DoJ0ethiTQ)
+
+---
+
+_Last updated: April 15, 2026_

@@ -1,0 +1,46 @@
+name: Deploy Docs to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Copy all Markdown files from each top-level folder into docs/
+      - name: Prepare docs directory
+        run: |
+          rm -rf docs
+          mkdir docs
+          for d in */ ; do
+            if [ -d "$d" ] && [ "$d" != "docs/" ] && [ "$d" != ".github/" ]; then
+              for f in "$d"*.md; do
+                if [ -f "$f" ]; then
+                  cp "$f" "docs/${d%/}-$(basename "$f")"
+                fi
+              done
+            fi
+          done
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
