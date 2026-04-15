@@ -5,17 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevOps Preparation Docs</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    h1 { color: #2c3e50; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+      background-size: cover;
+    }
+    h1 {
+      color: #fff;
+      text-shadow: 2px 2px 8px #222;
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+    .devops-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #2228;
+    }
     .folder-list, .file-list { list-style: none; padding: 0; }
-    .folder { font-weight: bold; margin-top: 1em; cursor: pointer; color: #2980b9; }
-    .file { margin-left: 1em; cursor: pointer; color: #16a085; }
+    .folder { font-weight: bold; margin-top: 1em; cursor: pointer; color: #ffe082; text-shadow: 1px 1px 4px #222; }
+    .file { margin-left: 1em; cursor: pointer; color: #80cbc4; }
     .file:hover, .folder:hover { text-decoration: underline; }
-    #content { margin-top: 2em; padding: 1em; border: 1px solid #eee; background: #fafafa; }
+    #content {
+      margin-top: 2em;
+      padding: 1em;
+      border: 1px solid #eee;
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px #2222;
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <h1>DevOps Preparation Docs</h1>
+  <h1>
+    <img src="https://cdn-icons-png.flaticon.com/512/2721/2721290.png" alt="DevOps" class="devops-img" />
+    DevOps Preparation Docs
+  </h1>
   <ul id="folders" class="folder-list"></ul>
   <div id="content"></div>
   <script>
@@ -55,7 +83,12 @@
             fileLi.textContent = file;
             fileLi.className = 'file';
             fileLi.onclick = () => {
-              contentEl.innerHTML = `<pre style="white-space: pre-wrap;">${fileContents[folder + '/' + file] || 'No content.'}</pre>`;
+              const content = fileContents[folder + '/' + file] || 'No content.';
+              if (file.endsWith('.md')) {
+                contentEl.innerHTML = marked.parse(content);
+              } else {
+                contentEl.innerHTML = '<pre style="white-space: pre-wrap;">' + content + '</pre>';
+              }
             };
             fileList.appendChild(fileLi);
           });
