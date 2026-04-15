@@ -69,7 +69,7 @@ const html = `<!DOCTYPE html>
             fileLi.textContent = file;
             fileLi.className = 'file';
             fileLi.onclick = () => {
-              contentEl.innerHTML = `<pre style="white-space: pre-wrap;">${fileContents[folder + '/' + file] || 'No content.'}</pre>`;
+              contentEl.innerHTML = '<pre style="white-space: pre-wrap;">' + (fileContents[folder + '/' + file] || 'No content.') + '</pre>';
             };
             fileList.appendChild(fileLi);
           });
