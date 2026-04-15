@@ -42,6 +42,7 @@ const html = `<!DOCTYPE html>
     .file:hover, .folder:hover { text-decoration: underline; }
     #content { margin-top: 2em; padding: 1em; border: 1px solid #eee; background: #fafafa; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <h1>DevOps Preparation Docs</h1>
@@ -69,7 +70,13 @@ const html = `<!DOCTYPE html>
             fileLi.textContent = file;
             fileLi.className = 'file';
             fileLi.onclick = () => {
-              contentEl.innerHTML = '<pre style="white-space: pre-wrap;">' + (fileContents[folder + '/' + file] || 'No content.') + '</pre>';
+              const content = fileContents[folder + '/' + file] || 'No content.';
+              // Render Markdown if .md file, else plain text
+              if (file.endsWith('.md')) {
+                contentEl.innerHTML = marked.parse(content);
+              } else {
+                contentEl.innerHTML = '<pre style="white-space: pre-wrap;">' + content + '</pre>';
+              }
             };
             fileList.appendChild(fileLi);
           });
