@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps Preparation Docs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #2c3e50; }
+    .folder-list, .file-list { list-style: none; padding: 0; }
+    .folder { font-weight: bold; margin-top: 1em; cursor: pointer; color: #2980b9; }
+    .file { margin-left: 1em; cursor: pointer; color: #16a085; }
+    .file:hover, .folder:hover { text-decoration: underline; }
+    #content { margin-top: 2em; padding: 1em; border: 1px solid #eee; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <h1>DevOps Preparation Docs</h1>
+  <ul id="folders" class="folder-list"></ul>
+  <div id="content"></div>
+  <script>
+    // Define your folder and file structure here
+    const structure = {
+      "aws": [],
+      "cicd": [],
+      "CostOptimization": ["k8s-cost-optimization"],
+      "devsecops": [],
+      "Docker": [],
+      "DR": [],
+      "git": [],
+      "Issues": [],
+      "k8s": [],
+      "monitoring": []
+    };
+    // Map file names to their content (for demo, only one file)
+    const fileContents = {
+      "CostOptimization/k8s-cost-optimization": `# Top 5 Ways to Reduce Kubernetes Cluster Cost\n\n**Based on the video by Abhishek Veeramalla**\n\nThis guide summarizes every key point from the video, providing a comprehensive, actionable checklist for Kubernetes cost optimization.\n\n---\n\n## 1. Cost Visibility\n- **FinOps Principle:** You cannot manage what you cannot measure.\n- **Granularity:** Track costs at Pod, Deployment, Service, Namespace, and Node levels.\n- **Actionable Data:** Identify expensive Pods and analyze why they consume resources.\n- **Tools:**\n  - Open Source: KubeCost, OpenCost\n  - Proprietary: Cast AI\n  - Manual: Even an Excel sheet is better than nothing\n\n## 2. Right-Sizing Instances (Pod Level)\n- **Pod Sizing:** Focus on setting appropriate Requests and Limits for Pods.\n- **Common Mistake:** Running Pods without resource limits.\n- **Risk:** Memory leaks (e.g., in Java apps) can cause runaway costs.\n- **Collaboration:** Work with developers to analyze and tune resource usage.\n\n## 3. Autoscaling (Scale Up AND Down)\n- **Not Just for Spikes:** Autoscaling should also scale down during low traffic.\n- **Tools:** Karpenter, EKS Auto Mode, GKE Autopilot\n- **Dynamic Adjustment:** Reduce nodes during off-peak hours.\n- **Bin Packing:** Use platforms like Cast AI to rebalance and terminate underutilized nodes.\n\n## 4. Spot Instances\n- **Savings:** Can reduce costs by 60–70%.\n- **Strategy:**\n  - Do not use for critical workloads (e.g., Payments)\n  - Use for stateless, non-critical services (e.g., email/OTP workers)\n  - Mixed clusters: combine regular and Spot nodes\n\n## 5. Cross-Zone Networking Costs\n- **Hidden Cost:** Data transfer between Availability Zones (AZ) incurs charges.\n- **Example:** Kafka broker in one AZ writing to EBS in another AZ.\n- **Scale Impact:** For high-volume apps, networking fees can rival compute costs.\n- **Solution:**\n  - Use storage like S3 with built-in replication\n  - Architect to minimize cross-zone data movement\n\n---\n\n**Video Link:** [Top 5 ways to reduce Kubernetes cluster cost](https://www.youtube.com/watch?v=9DoJ0ethiTQ)\n\n---\n\n_Last updated: April 15, 2026_\n`
+    };
+    const foldersEl = document.getElementById('folders');
+    const contentEl = document.getElementById('content');
+    Object.keys(structure).forEach(folder => {
+      const folderLi = document.createElement('li');
+      folderLi.textContent = folder;
+      folderLi.className = 'folder';
+      folderLi.onclick = () => {
+        contentEl.innerHTML = '';
+        const files = structure[folder];
+        if (files.length === 0) {
+          contentEl.innerHTML = '<em>No files in this folder.</em>';
+        } else {
+          const fileList = document.createElement('ul');
+          fileList.className = 'file-list';
+          files.forEach(file => {
+            const fileLi = document.createElement('li');
+            fileLi.textContent = file;
+            fileLi.className = 'file';
+            fileLi.onclick = () => {
+              contentEl.innerHTML = `<pre style="white-space: pre-wrap;">${fileContents[folder + '/' + file] || 'No content.'}</pre>`;
+            };
+            fileList.appendChild(fileLi);
+          });
+          contentEl.appendChild(fileList);
+        }
+      };
+      foldersEl.appendChild(folderLi);
+    });
+  </script>
+</body>
+</html>

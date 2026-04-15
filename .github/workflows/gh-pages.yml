@@ -18,23 +18,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Copy all Markdown files from each top-level folder into docs/
-      - name: Prepare docs directory
-        run: |
-          rm -rf docs
-          mkdir docs
-          for d in */ ; do
-            if [ -d "$d" ] && [ "$d" != "docs/" ] && [ "$d" != ".github/" ]; then
-              for f in "$d"*.md; do
-                if [ -f "$f" ]; then
-                  cp "$f" "docs/${d%/}-$(basename "$f")"
-                fi
-              done
-            fi
-          done
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate docs index
+        run: node generate-docs-index.js
+
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
